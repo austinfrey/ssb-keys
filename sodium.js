@@ -5,11 +5,13 @@ module.exports = {
   curves: ["ed25519"],
 
   generate: function (seed) {
-    if (!seed) sodium.randombytes((seed = Buffer.alloc(32)));
+    if (!seed) {
+      seed = Buffer.alloc(32);
+      sodium.randombytes(seed);
+    }
 
-    var keys = seed
-      ? sodium.crypto_sign_seed_keypair(seed)
-      : sodium.crypto_sign_keypair();
+    var keys = sodium.crypto_sign_seed_keypair(seed);
+
     return {
       curve: "ed25519",
       public: keys.publicKey,
